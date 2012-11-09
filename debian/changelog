@@ -1,3 +1,11 @@
+linux-sunxi (3.0.42-1) unstable; urgency=low
+
+  * initial import of debian packaging
+  * rename source to linux-sunxi
+  * reverse version number back to 3.0.42-1
+
+ -- Niall Walsh <niallwalsh@users.berlios.de>  Fri, 09 Nov 2012 11:56:25 +0000
+
 linux (3.2.32-1) unstable; urgency=low
 
   * New upstream stable update:
