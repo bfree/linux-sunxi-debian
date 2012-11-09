@@ -20,7 +20,7 @@ Updating the upstream source
 
    (the orig target of the Makefiles requires rsync)
 
-Applying patches to the Debian kernel tree
+Applying patches to the sunxi kernel tree
 ==========================================
 
 The Debian kernel packaging uses the quilt patch system, but with
