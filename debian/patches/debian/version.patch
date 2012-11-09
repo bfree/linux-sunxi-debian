@@ -6,9 +6,11 @@ For distribution binary packages we assume
 $DISTRIBUTION_OFFICIAL_BUILD, $DISTRIBUTOR and $DISTRIBUTION_VERSION
 are set.
 
---- a/Makefile
-+++ b/Makefile
-@@ -976,7 +976,7 @@ endif
+Index: linux-3.0.42/Makefile
+===================================================================
+--- linux-3.0.42.orig/Makefile	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/Makefile	2012-11-07 22:47:58.733836097 +0000
+@@ -976,7 +976,7 @@
  prepare2: prepare3 outputmakefile asm-generic
  
  prepare1: prepare2 include/linux/version.h include/generated/utsrelease.h \
@@ -16,8 +18,8 @@ are set.
 +                   include/config/auto.conf include/generated/package.h
  	$(cmd_crmodverdir)
  
- archprepare: archscripts prepare1 scripts_basic
-@@ -1008,12 +1008,25 @@ define filechk_version.h
+ archprepare: prepare1 scripts_basic
+@@ -1009,12 +1009,25 @@
  	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))';)
  endef
  
@@ -43,8 +45,10 @@ are set.
  PHONY += headerdep
  headerdep:
  	$(Q)find $(srctree)/include/ -name '*.h' | xargs --max-args 1 \
---- a/arch/s390/kernel/traps.c
-+++ b/arch/s390/kernel/traps.c
+Index: linux-3.0.42/arch/s390/kernel/traps.c
+===================================================================
+--- linux-3.0.42.orig/arch/s390/kernel/traps.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/s390/kernel/traps.c	2012-11-07 22:47:58.734836098 +0000
 @@ -33,6 +33,7 @@
  #include <linux/kprobes.h>
  #include <linux/bug.h>
@@ -53,7 +57,7 @@ are set.
  #include <asm/system.h>
  #include <asm/uaccess.h>
  #include <asm/io.h>
-@@ -166,11 +167,12 @@ static void show_last_breaking_event(str
+@@ -170,11 +171,12 @@
   */
  void dump_stack(void)
  {
@@ -68,7 +72,7 @@ are set.
  	printk("Process %s (pid: %d, task: %p, ksp: %p)\n",
  	       current->comm, current->pid, current,
  	       (void *) current->thread.ksp);
-@@ -217,11 +219,12 @@ void show_registers(struct pt_regs *regs
+@@ -221,11 +223,12 @@
  void show_regs(struct pt_regs *regs)
  {
  	print_modules();
@@ -83,30 +87,10 @@ are set.
  	printk("Process %s (pid: %d, task: %p, ksp: %p)\n",
  	       current->comm, current->pid, current,
  	       (void *) current->thread.ksp);
---- a/arch/x86/um/sysrq_64.c
-+++ b/arch/x86/um/sysrq_64.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/sched.h>
- #include <linux/utsname.h>
-+#include <generated/package.h>
- #include <asm/current.h>
- #include <asm/ptrace.h>
- #include "sysrq.h"
-@@ -16,8 +17,9 @@ void __show_regs(struct pt_regs *regs)
- {
- 	printk("\n");
- 	print_modules();
--	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s\n", task_pid_nr(current),
--		current->comm, print_tainted(), init_utsname()->release);
-+	printk(KERN_INFO "Pid: %d, comm: %.20s %s %s%s\n", task_pid_nr(current),
-+		current->comm, print_tainted(), init_utsname()->release,
-+		LINUX_PACKAGE_ID);
- 	printk(KERN_INFO "RIP: %04lx:[<%016lx>]\n", PT_REGS_CS(regs) & 0xffff,
- 	       PT_REGS_RIP(regs));
- 	printk(KERN_INFO "RSP: %016lx  EFLAGS: %08lx\n", PT_REGS_SP(regs),
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
+Index: linux-3.0.42/arch/x86/kernel/process.c
+===================================================================
+--- linux-3.0.42.orig/arch/x86/kernel/process.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/x86/kernel/process.c	2012-11-07 22:47:58.734836098 +0000
 @@ -14,6 +14,7 @@
  #include <linux/utsname.h>
  #include <trace/events/power.h>
@@ -115,7 +99,7 @@ are set.
  #include <asm/cpu.h>
  #include <asm/system.h>
  #include <asm/apic.h>
-@@ -105,11 +106,12 @@ void show_regs_common(void)
+@@ -105,11 +106,12 @@
  	board = dmi_get_system_info(DMI_BOARD_NAME);
  
  	printk(KERN_CONT "\n");
@@ -130,8 +114,10 @@ are set.
  	printk(KERN_CONT " %s %s", vendor, product);
  	if (board)
  		printk(KERN_CONT "/%s", board);
---- a/arch/x86/kernel/dumpstack.c
-+++ b/arch/x86/kernel/dumpstack.c
+Index: linux-3.0.42/arch/x86/kernel/dumpstack.c
+===================================================================
+--- linux-3.0.42.orig/arch/x86/kernel/dumpstack.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/x86/kernel/dumpstack.c	2012-11-07 22:47:58.735836099 +0000
 @@ -15,6 +15,7 @@
  #include <linux/bug.h>
  #include <linux/nmi.h>
@@ -140,7 +126,7 @@ are set.
  
  #include <asm/stacktrace.h>
  
-@@ -185,11 +186,12 @@ void dump_stack(void)
+@@ -185,11 +186,12 @@
  	unsigned long stack;
  
  	bp = stack_frame(current, NULL);
@@ -155,8 +141,10 @@ are set.
  	show_trace(NULL, NULL, &stack, bp);
  }
  EXPORT_SYMBOL(dump_stack);
---- a/arch/ia64/kernel/process.c
-+++ b/arch/ia64/kernel/process.c
+Index: linux-3.0.42/arch/ia64/kernel/process.c
+===================================================================
+--- linux-3.0.42.orig/arch/ia64/kernel/process.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/ia64/kernel/process.c	2012-11-07 22:47:58.735836099 +0000
 @@ -29,6 +29,7 @@
  #include <linux/kdebug.h>
  #include <linux/utsname.h>
@@ -165,7 +153,7 @@ are set.
  
  #include <asm/cpu.h>
  #include <asm/delay.h>
-@@ -111,9 +112,9 @@ show_regs (struct pt_regs *regs)
+@@ -111,9 +112,9 @@
  	print_modules();
  	printk("\nPid: %d, CPU %d, comm: %20s\n", task_pid_nr(current),
  			smp_processor_id(), current->comm);
@@ -177,17 +165,19 @@ are set.
  	print_symbol("ip is at %s\n", ip);
  	printk("unat: %016lx pfs : %016lx rsc : %016lx\n",
  	       regs->ar_unat, regs->ar_pfs, regs->ar_rsc);
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
+Index: linux-3.0.42/arch/arm/kernel/process.c
+===================================================================
+--- linux-3.0.42.orig/arch/arm/kernel/process.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/arm/kernel/process.c	2012-11-07 22:49:30.054874572 +0000
 @@ -31,6 +31,7 @@
  #include <linux/random.h>
  #include <linux/hw_breakpoint.h>
- #include <linux/cpuidle.h>
+ #include <linux/console.h>
 +#include <generated/package.h>
  
  #include <asm/cacheflush.h>
- #include <asm/leds.h>
-@@ -261,11 +262,12 @@ void __show_regs(struct pt_regs *regs)
+ #include <asm/processor.h>
+@@ -380,11 +381,12 @@
  	unsigned long flags;
  	char buf[64];
  
@@ -202,8 +192,10 @@ are set.
  	print_symbol("PC is at %s\n", instruction_pointer(regs));
  	print_symbol("LR is at %s\n", regs->ARM_lr);
  	printk("pc : [<%08lx>]    lr : [<%08lx>]    psr: %08lx\n"
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
+Index: linux-3.0.42/arch/powerpc/kernel/process.c
+===================================================================
+--- linux-3.0.42.orig/arch/powerpc/kernel/process.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/powerpc/kernel/process.c	2012-11-07 22:47:58.738836102 +0000
 @@ -38,6 +38,7 @@
  #include <linux/personality.h>
  #include <linux/random.h>
@@ -212,7 +204,7 @@ are set.
  
  #include <asm/pgtable.h>
  #include <asm/uaccess.h>
-@@ -626,8 +627,9 @@ void show_regs(struct pt_regs * regs)
+@@ -644,8 +645,9 @@
  
  	printk("NIP: "REG" LR: "REG" CTR: "REG"\n",
  	       regs->nip, regs->link, regs->ctr);
@@ -224,8 +216,10 @@ are set.
  	printk("MSR: "REG" ", regs->msr);
  	printbits(regs->msr, msr_bits);
  	printk("  CR: %08lx  XER: %08lx\n", regs->ccr, regs->xer);
---- a/arch/sh/kernel/process_32.c
-+++ b/arch/sh/kernel/process_32.c
+Index: linux-3.0.42/arch/sh/kernel/process_32.c
+===================================================================
+--- linux-3.0.42.orig/arch/sh/kernel/process_32.c	2012-11-04 13:27:55.000000000 +0000
++++ linux-3.0.42/arch/sh/kernel/process_32.c	2012-11-07 22:47:58.738836102 +0000
 @@ -22,6 +22,7 @@
  #include <linux/ftrace.h>
  #include <linux/hw_breakpoint.h>
@@ -234,7 +228,7 @@ are set.
  #include <asm/uaccess.h>
  #include <asm/mmu_context.h>
  #include <asm/system.h>
-@@ -32,10 +33,11 @@ void show_regs(struct pt_regs * regs)
+@@ -32,10 +33,11 @@
  {
  	printk("\n");
  	printk("Pid : %d, Comm: \t\t%s\n", task_pid_nr(current), current->comm);
