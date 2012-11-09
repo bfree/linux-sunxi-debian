@@ -1,52 +1,12 @@
 [abi]
-abiname: 4
-ignore-changes:
- module:net/l2tp/*
-# A bunch of NFS/SunRPC exports, not selected by module because MIPS has
-# them built-in
- __rpc_wait_for_completion_task
- bc_svc_process
- nfs4*
- nfs_*
- nlmclnt_*
- nlmsvc_*
- pnfs_*
- put_lseg
- put_rpccred
- rpc_*
- rpcauth_*
- rpcb_getport_async
- svc_*
- svcauth_unix_set_client
- unix_domain_find
- xprt_*
+abiname: 4.sunxi.1
 
 [base]
 arches:
- alpha
- amd64
- armel
  armhf
- hppa
- i386
- ia64
- m68k
- mips
- mipsel
- powerpc
- ppc64
- s390
- s390x
- sh4
- sparc
- sparc64
 compiler: gcc-4.6
 featuresets:
  none
- rt
-
-[featureset-rt_base]
-enabled: true
 
 [description]
 part-long-up: This kernel is not suitable for SMP (multi-processor,
@@ -60,8 +20,6 @@ type: plain
 
 [relations]
 # compilers
-gcc-4.4: gcc-4.4
-gcc-4.5: gcc-4.5
 gcc-4.6: gcc-4.6
 
 # initramfs-generators
